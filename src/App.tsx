@@ -13,12 +13,12 @@ export function App() {
   const { data: paginatedTransactions, ...paginatedTransactionsUtils } = usePaginatedTransactions()
   const { data: transactionsByEmployee, ...transactionsByEmployeeUtils } = useTransactionsByEmployee()
   const [isLoading, setIsLoading] = useState(false)
+  
 
   const transactions = useMemo(
     () => paginatedTransactions?.data ?? transactionsByEmployee ?? null,
     [paginatedTransactions, transactionsByEmployee]
   )
-
   const loadAllTransactions = useCallback(async () => {
     setIsLoading(true)
     transactionsByEmployeeUtils.invalidateData()
@@ -26,7 +26,6 @@ export function App() {
     await employeeUtils.fetchAll()
     await paginatedTransactionsUtils.fetchAll()
 
-    setIsLoading(false)
   }, [employeeUtils, paginatedTransactionsUtils, transactionsByEmployeeUtils])
 
   const loadTransactionsByEmployee = useCallback(
@@ -42,7 +41,8 @@ export function App() {
     if (employees === null && !employeeUtils.loading) {
       loadAllTransactions()
     }
-  }, [employeeUtils.loading, employees, loadAllTransactions])
+    if (employees !== null) setIsLoading(false);
+  }, [setIsLoading, employeeUtils.loading, employees, loadAllTransactions])
 
   return (
     <Fragment>
@@ -76,7 +76,8 @@ export function App() {
           <Transactions transactions={transactions} />
 
           {transactions !== null && (
-            <button
+            paginatedTransactions?.nextPage ? (
+              <button
               className="RampButton"
               disabled={paginatedTransactionsUtils.loading}
               onClick={async () => {
@@ -85,6 +86,7 @@ export function App() {
             >
               View More
             </button>
+            ) : null
           )}
         </div>
       </main>
