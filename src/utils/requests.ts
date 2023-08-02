@@ -43,7 +43,7 @@ export const getTransactionsByEmployee = ({ employeeId }: RequestByEmployeeParam
   if (!employeeId) {
     throw new Error("Employee id cannot be empty")
   }
-
+  if (employeeId === "All") return data.transactions;
   return data.transactions.filter((transaction) => transaction.employee.id === employeeId)
 }
 

@@ -15,14 +15,15 @@ export function usePaginatedTransactions(): PaginatedTransactionsResult {
       {
         page: paginatedTransactions === null ? 0 : paginatedTransactions.nextPage,
       }
-    )
-
+      )
+      console.log('response: ', response);
     setPaginatedTransactions((previousResponse) => {
+      console.log("previous response ",previousResponse);
       if (response === null || previousResponse === null) {
-        return response
+        return (response)
       }
 
-      return { data: response.data, nextPage: response.nextPage }
+      return { data: response.data.concat(previousResponse.data), nextPage: response.nextPage }
     })
   }, [fetchWithCache, paginatedTransactions])
 

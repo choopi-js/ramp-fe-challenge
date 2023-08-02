@@ -43,6 +43,7 @@ export function fakeFetch<TData, TParams extends object = object>(
           break
 
         case "transactionsByEmployee":
+          console.log(params)
           result = getTransactionsByEmployee(params as RequestByEmployeeParams) as unknown as TData
 
           setTimeout(() => {
