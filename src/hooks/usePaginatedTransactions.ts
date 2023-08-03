@@ -17,7 +17,7 @@ export function usePaginatedTransactions(): PaginatedTransactionsResult {
       )
     setPaginatedTransactions((previousResponse) => {
       if (response === null || previousResponse === null) {
-        return (response)
+        return response
       }
       return { data: response.data.concat(previousResponse.data), nextPage: response.nextPage }
     })
